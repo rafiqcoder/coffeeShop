@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./pages/Home";
@@ -8,10 +7,9 @@ import About from "./pages/about";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/login";
+import Signup from "./pages/auth/Signup";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <BrowserRouter>
       <Routes>
@@ -21,6 +19,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

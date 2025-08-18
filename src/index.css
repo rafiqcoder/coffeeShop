@@ -1,2 +1,27 @@
+@font-face {
+  font-family: "Morsan";
+  font-style: normal;
+  font-weight: 200 700;
+  src: url("./assets/fonts/Morsan/Morsan.woff2") format("woff2");
+}
 @import "tailwindcss";
 @plugin "daisyui";
+
+body {
+  background-color: #fff;
+}
+
+@theme {
+  --font-primary: "Morsan";
+}
+/* .oxanium-<uniquifier> {
+  font-family: "Oxanium", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */
+
+.mySwiper .swiper-button-prev,
+.swiper-button-next {
+  color: #008a09 !important;
+}

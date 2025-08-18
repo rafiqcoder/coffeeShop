@@ -3,13 +3,13 @@ import React from "react";
 const Hero = () => {
   return (
     <div
-      className="hero min-h-screen"
+      className="hero min-h-screen rounded-2xl"
       style={{
         backgroundImage:
           "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
       }}
     >
-      <div className="hero-overlay"></div>
+      <div className="hero-overlay rounded-xl"></div>
       <div className=" text-neutral-content pl-10">
         <div className="w-1/2 text-left">
           <p>Elevate Your Coffee Experience</p>

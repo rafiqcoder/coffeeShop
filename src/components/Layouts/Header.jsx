@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../../assets/logo.png";
 import search from "../../assets/search.svg";
 import { NavLink } from "react-router";
+import { DataContext } from "../../contextApi/contextApi";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../firebase.config";
 
 const Header = () => {
+  const [loading, setLoading] = React.useState(false);
+  const { userData } = useContext(DataContext);
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
+  const handlelogout = () => {
+    setLoading(true);
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log("User signed out successfully");
+        setLoading(false);
+      })
+      .catch((error) => {
+        // An error happened
+        console.log("Error during logout:", error.message);
+      });
+  };
+
+  if (userData) {
+    console.log("User is logged in:", userData);
+  }
   return (
     <header>
       <nav className="flex items-center justify-between  bg-white shadow-md rounded-md p-4">
@@ -28,12 +51,21 @@ const Header = () => {
         </ul>
         <img src={logo} alt="coffee shop logo" className="h-[60px]" />
         <div className="flex items-center space-x-4">
-          <NavLink
-            to="/login"
-            className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
-          >
-            Login/Signup
-          </NavLink>
+          {userData !== null ? (
+            <NavLink
+              className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
+              onClick={handlelogout}
+            >
+              {`logout, ${userData.displayName}`}
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/login"
+              className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
+            >
+              Login/Signup
+            </NavLink>
+          )}
           <button className="text-[#1E1E1E] hover:text-[#EF2E48] cursor-pointer">
             <img src={search} alt="" />
           </button>
