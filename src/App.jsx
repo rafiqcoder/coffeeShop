@@ -27,14 +27,7 @@ function App() {
           <Route path="/register" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Route>
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardLayout />
-            </PrivateRoute>
-          }
-        >
+        <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<DashboardHome />} />
           <Route path="/dashboard/addproducts" element={<AddProduct />} />
           <Route path="/dashboard/allproducts" element={<AllProducts />} />
