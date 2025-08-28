@@ -1,27 +1,61 @@
 import React from "react";
-import { Link, Links, useNavigate } from "react-router";
+import { Link, Links, useLocation, useNavigate } from "react-router";
 import { auth } from "../../../firebase.config";
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { signInWithPopup } from "firebase/auth";
 import { DataContext } from "../../contextApi/contextApi";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
-  const { setUserData } = React.useContext(DataContext);
   const [loading, setLoading] = React.useState(false);
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const submitted = (data) => {
+    setLoading(true);
+    console.log("Form submitted with data:", data);
+
+    const { email, password } = data;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user;
+        console.log("User signed in:", user);
+
+        alert("Login successful");
+        setLoading(false);
+        navigate("/");
+
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Error during login:", errorCode, errorMessage);
+
+        alert("Login failed");
+        setLoading(false);
+      });
+  };
   const googleLogin = () => {
     setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
         console.log("User signed in:", user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        setUserData(user);
+
         setLoading(false);
-        navigate("/"); // Redirect to home page after successful login
+        // navigate("/");
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         // Handle Errors here.
@@ -47,16 +81,24 @@ const Login = () => {
         </div>
         <div className="card bg-base-100 w-full max-w-md mt-5 shrink-0 shadow-2xl">
           <div className="card-body">
-            <fieldset className="fieldset">
+            <form className="fieldset" onSubmit={handleSubmit(submitted)}>
               <label className="label">Email</label>
-              <input type="email" className="input" placeholder="Email" />
+              <input {...register("email")} className="input" />
+
               <label className="label">Password</label>
-              <input type="password" className="input" placeholder="Password" />
+              <input
+                type="password"
+                {...register("password")}
+                className="input"
+              />
+
               <div>
                 <a className="link link-hover">Forgot password?</a>
               </div>
-              <button className="btn btn-neutral mt-4">Login</button>
-            </fieldset>
+              <button type="submit" className="btn btn-neutral mt-4">
+                Login
+              </button>
+            </form>
             <div className="divider">OR</div>
             <button
               className="btn btn-outline btn-warning"

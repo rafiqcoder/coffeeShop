@@ -6,6 +6,7 @@ import Title from "../components/UI/Title";
 import ImgCarousel from "../components/ImgCarousel.jsx/ImgCarousel";
 
 const Home = () => {
+  
   return (
     <div>
       <Hero />

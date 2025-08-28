@@ -8,6 +8,11 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/login";
 import Signup from "./pages/auth/Signup";
+import DashboardLayout from "./components/Layouts/DashboardLayout";
+import DashboardHome from "./components/Dashboard/DashboardHome";
+import AddProduct from "./components/Dashboard/AddProduct";
+import AllProducts from "./components/Dashboard/AllProducts";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -21,6 +26,18 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<DashboardHome />} />
+          <Route path="/dashboard/addproducts" element={<AddProduct />} />
+          <Route path="/dashboard/allproducts" element={<AllProducts />} />
         </Route>
       </Routes>
     </BrowserRouter>

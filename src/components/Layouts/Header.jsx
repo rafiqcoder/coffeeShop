@@ -7,8 +7,8 @@ import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 
 const Header = () => {
-  const [loading, setLoading] = React.useState(false);
   const { userData } = useContext(DataContext);
+  const [loading, setLoading] = React.useState(false);
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
@@ -21,17 +21,22 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        console.log("User signed out successfully");
+        console.log("User signed out successfully" + userData);
         setLoading(false);
       })
       .catch((error) => {
         // An error happened
         console.log("Error during logout:", error.message);
+        setLoading(false);
       });
   };
 
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
   if (userData) {
-    console.log("User is logged in:", userData);
+    console.log("User is logged in: Header", userData);
   }
   return (
     <header>
@@ -51,13 +56,21 @@ const Header = () => {
         </ul>
         <img src={logo} alt="coffee shop logo" className="h-[60px]" />
         <div className="flex items-center space-x-4">
-          {userData !== null ? (
-            <NavLink
-              className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
-              onClick={handlelogout}
-            >
-              {`logout, ${userData.displayName}`}
-            </NavLink>
+          {userData?.uid ? (
+            <>
+              <NavLink
+                className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
+                onClick={handlelogout}
+              >
+                {`logout, ${userData.displayName}`}
+              </NavLink>
+              <NavLink
+                className="text-[#1E1E1E] hover:text-[#EF2E48] text-lg"
+                to="/dashboard"
+              >
+                Dashboard
+              </NavLink>
+            </>
           ) : (
             <NavLink
               to="/login"
